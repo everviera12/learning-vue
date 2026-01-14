@@ -4,6 +4,14 @@ const message = 'Hello world dinamyc';
 const active = false;
 const modal = true;
 
+
+let counter = 0
+
+const handleClick = () => {
+  counter++
+  console.log(counter);
+}
+
 const arrayFruits = [
   {
     name: "Manzana",
@@ -47,6 +55,9 @@ const arrayFruits = [
       </li>
     </template>
   </ol>
+
+  <button v-on:click="handleClick()">Activo 1</button>
+  <button @click.right="handleClick()">Activo 2</button>
 </template>
 
 <style>
