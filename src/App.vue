@@ -1,82 +1,58 @@
 <script setup>
-import { ref } from 'vue';
-
-console.log("Hello world from console");
-
-const message = 'Hello world dinamyc';
-const active = false;
-const modal = true;
-
+import { computed, ref } from 'vue';
 
 const counter = ref(0)
+const arrayCounter = ref([])
 
-const handleClick = (condition) => {
-  if (condition === true) {
-    counter.value++
-  } else {
-    counter.value--
-  }
-  console.log(counter.value)
+/**
+ *  Logic to handle interactions of button component
+ * @handleClick => increment or decrement value
+ * @buttonClass => depends of the value the counter style is diferent
+
+*/
+const handleClick = (step) => {
+  counter.value += step
 }
 
+const buttonClass = computed(() => {
+  if (counter.value === 0) return 'neutral'
+  if (counter.value < 0) return 'negative'
+  return 'positive'
+})
 
-const arrayFruits = [
-  {
-    name: "Manzana",
-    icon: '🍎',
-    price: "$1.00",
-    description: "Una manzana",
-    stock: 0,
-  },
-  {
-    name: "Pera",
-    icon: '🍐',
-    price: "$2.00",
-    description: "Una pera",
-    stock: 10,
-  },
-  {
-    name: "Naranja",
-    icon: '🍊',
-    price: "$3.00",
-    description: "Una naranja",
-    stock: 20,
-  },
-]
+const add = () => {
+  arrayCounter.value.push(counter.value);
+  console.log(arrayCounter.value);
+};
+
+const blockNumber = computed(() =>
+  arrayCounter.value.includes(counter.value)
+)
+
+const sortedArrayCounter = computed(() => {
+  return [...arrayCounter.value].sort((a, b) => a - b)
+})
+
 </script>
 
 <template>
-  <h1>Hello world!</h1>
-  <h2>{{ message }}</h2>
-  <!-- <h3 :style="`color: red; font-weight: 600;`">{{ active ? 'tamo activo 😎' : 'no tamo activo 😖' }}</h3> -->
-
-  <!-- directivas -->
-  <h3 v-if="active">tamo activo con directivas 😎</h3>
-  <h3 v-else="active">no tamo activo con directivas 😖</h3>
-
-  <h4 v-show="modal" style="color: yellow;"> v-show {{ modal }}</h4>
-
-  <ol>
-    <template v-for="(fruit, idx) in arrayFruits" :key="idx">
-      <li v-if="fruit.stock > 0">
-        {{ fruit.icon }} - {{ fruit.price }} - {{ fruit.name }}
-      </li>
-    </template>
-  </ol>
-
-  <h2 :class="counter < 0 ? 'negative' : 'positive'">
+  <h2 :class="counter === 0 ? 'neutral' : counter < 0 ? 'negative' : 'positive'">
     {{ counter }}
   </h2>
 
-  <div style="display: flex; gap: 1rem;">
-    <button @click="handleClick(true)">Button +</button>
-    <button @click="handleClick(false)">Button -</button>
+  <div class="btn-group">
+    <button class="btn btn-success" @click="handleClick(1)">+</button>
+    <button class="btn btn-danger" @click="handleClick(-1)">-</button>
+    <button @click="add" :disabled="blockNumber" class="btn btn-primary">
+      Add
+    </button>
   </div>
 
-
-
-  <!-- <button v-on:click="handleClick()">Activo 1</button>
-  <button @click.right="handleClick()">Activo 2</button> -->
+  <ul class="list-group mt-2">
+    <li class="list-group-item" v-for="(item, index) in sortedArrayCounter" :key="index">
+      {{ item }}
+    </li>
+  </ul>
 </template>
 
 <style>
@@ -88,7 +64,11 @@ h1 {
   color: red;
 }
 
-.positive { 
+.positive {
   color: lime;
+}
+
+.neutral {
+  color: white;
 }
 </style>
