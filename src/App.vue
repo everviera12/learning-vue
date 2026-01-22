@@ -1,16 +1,24 @@
 <script setup>
+import { ref } from 'vue';
+
 console.log("Hello world from console");
+
 const message = 'Hello world dinamyc';
 const active = false;
 const modal = true;
 
 
-let counter = 0
+const counter = ref(0)
 
-const handleClick = () => {
-  counter++
-  console.log(counter);
+const handleClick = (condition) => {
+  if (condition === true) {
+    counter.value++
+  } else {
+    counter.value--
+  }
+  console.log(counter.value)
 }
+
 
 const arrayFruits = [
   {
@@ -56,12 +64,31 @@ const arrayFruits = [
     </template>
   </ol>
 
-  <button v-on:click="handleClick()">Activo 1</button>
-  <button @click.right="handleClick()">Activo 2</button>
+  <h2 :class="counter < 0 ? 'negative' : 'positive'">
+    {{ counter }}
+  </h2>
+
+  <div style="display: flex; gap: 1rem;">
+    <button @click="handleClick(true)">Button +</button>
+    <button @click="handleClick(false)">Button -</button>
+  </div>
+
+
+
+  <!-- <button v-on:click="handleClick()">Activo 1</button>
+  <button @click.right="handleClick()">Activo 2</button> -->
 </template>
 
 <style>
 h1 {
   color: dodgerblue;
+}
+
+.negative {
+  color: red;
+}
+
+.positive { 
+  color: lime;
 }
 </style>
