@@ -1,74 +1,42 @@
 <script setup>
-import { computed, ref } from 'vue';
+import Counter from './components/counter.vue';
+import Card from './components/ui/card.vue';
+import TextRow from './components/ui/text-row.vue';
 
-const counter = ref(0)
-const arrayCounter = ref([])
-
-/**
- *  Logic to handle interactions of button component
- * @handleClick => increment or decrement value
- * @buttonClass => depends of the value the counter style is diferent
-
-*/
-const handleClick = (step) => {
-  counter.value += step
-}
-
-const buttonClass = computed(() => {
-  if (counter.value === 0) return 'neutral'
-  if (counter.value < 0) return 'negative'
-  return 'positive'
-})
-
-const add = () => {
-  arrayCounter.value.push(counter.value);
-  console.log(arrayCounter.value);
-};
-
-const blockNumber = computed(() =>
-  arrayCounter.value.includes(counter.value)
-)
-
-const sortedArrayCounter = computed(() => {
-  return [...arrayCounter.value].sort((a, b) => a - b)
-})
-
+const TECH_ARTICLES = [
+    {
+        title: "Microservices with Go & Node",
+        text: "Exploring high-performance architectures using Go for heavy lifting and Node.js for API orchestration."
+    },
+    {
+        title: "Secure by Design",
+        text: "Implementing advanced security headers and Content Security Policy (CSP) in modern Next.js applications."
+    },
+    {
+        title: "The Monorepo Edge",
+        text: "Managing multiple backend services with pnpm workspaces for a more efficient developer experience."
+    },
+    {
+        title: "Scalable Infrastructure",
+        text: "How tech giants like Mercado Libre handle millions of requests using Go, Kafka, and Kubernetes."
+    },
+    {
+        title: "Web Accessibility 2026",
+        text: "Beyond colors: Building inclusive digital products that meet WCAG AA standards and beyond."
+    }
+];
 </script>
 
 <template>
-  <h2 :class="counter === 0 ? 'neutral' : counter < 0 ? 'negative' : 'positive'">
-    {{ counter }}
-  </h2>
-
-  <div class="btn-group">
-    <button class="btn btn-success" @click="handleClick(1)">+</button>
-    <button class="btn btn-danger" @click="handleClick(-1)">-</button>
-    <button @click="add" :disabled="blockNumber" class="btn btn-primary">
-      Add
-    </button>
-  </div>
-
-  <ul class="list-group mt-2">
-    <li class="list-group-item" v-for="(item, index) in sortedArrayCounter" :key="index">
-      {{ item }}
-    </li>
-  </ul>
+    <TextRow title="Tech Blog" text="Code & Beyond. Weekly articles about the future of software engineering." />
+    
+    <div class="row">
+        <Card 
+            v-for="(post, idx) in TECH_ARTICLES" 
+            :key="idx" 
+            :title="post.title" 
+            :text="post.text"
+        />
+    </div>
+    
 </template>
-
-<style>
-h1 {
-  color: dodgerblue;
-}
-
-.negative {
-  color: red;
-}
-
-.positive {
-  color: lime;
-}
-
-.neutral {
-  color: white;
-}
-</style>
