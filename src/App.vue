@@ -1,9 +1,10 @@
 <script setup>
+import { ref } from 'vue';
 import Counter from './components/counter.vue';
 import Card from './components/ui/card.vue';
 import TextRow from './components/ui/text-row.vue';
 
-const TECH_ARTICLES = [
+const TECH_ARTICLES = ref([
     {
         title: "Microservices with Go & Node",
         text: "Exploring high-performance architectures using Go for heavy lifting and Node.js for API orchestration."
@@ -24,19 +25,18 @@ const TECH_ARTICLES = [
         title: "Web Accessibility 2026",
         text: "Beyond colors: Building inclusive digital products that meet WCAG AA standards and beyond."
     }
-];
+]);
+
+const myFavorite = ref("")
+
+const pinFavorite = (title) => {
+    myFavorite.value = title;
+}
 </script>
 
 <template>
     <TextRow title="Tech Blog" text="Code & Beyond. Weekly articles about the future of software engineering." />
-    
-    <div class="row">
-        <Card 
-            v-for="(post, idx) in TECH_ARTICLES" 
-            :key="idx" 
-            :title="post.title" 
-            :text="post.text"
-        />
-    </div>
-    
+    <span class="display-6 mb-3">{{ myFavorite || "Sin favorito" }}</span>
+    <Card v-for="(post, idx) in TECH_ARTICLES" :key="idx" :title="post.title" :text="post.text"
+        @pinFavorite="pinFavorite" />
 </template>
